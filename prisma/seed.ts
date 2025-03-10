@@ -1,11 +1,20 @@
 import { PrismaClient } from "@prisma/client";
-
+import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 async function main() {
   await prisma.response.deleteMany();
   await prisma.survey.deleteMany();
   await prisma.question.deleteMany();
+  await prisma.user.deleteMany();
+  const hashedPassword = await bcrypt.hash("password", 10);
+
+  await prisma.user.create({
+    data: {
+      email: "test@test.com",
+      password: hashedPassword,
+    },
+  });
 
   await prisma.question.createMany({
     data: [{

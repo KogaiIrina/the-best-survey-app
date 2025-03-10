@@ -11,8 +11,11 @@ type Question = {
   options: string | null;
 }
 
+type SurveyFormProps = {
+  userId: number;
+}
 
-export default function SurveyForm() {
+export default function SurveyForm({ userId }: SurveyFormProps) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [responses, setResponses] = useState<{[key: number]: string}>({});
   const [loading, setLoading] = useState(false);
@@ -78,6 +81,7 @@ export default function SurveyForm() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          userId,
           responses: formattedResponses,
         }),
       });
