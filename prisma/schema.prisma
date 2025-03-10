@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Question {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  inputType String
+  options String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  responses Response[]
+}
+
+model Response {
+  id Int @id @default(autoincrement())
+  answer String
+  questionId Int
+  question Question @relation(fields: [questionId], references: [id])
+  surveyId Int
+  survey Survey @relation(fields: [surveyId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Survey {
+  id Int @id @default(autoincrement())
+  userId Int? //optional for now but we can use it in the future
+  responses Response[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
